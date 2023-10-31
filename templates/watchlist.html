@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>My Watchlist</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+</head>
+<body>
+    <!DOCTYPE html>
+
+
+
+<html>
+<head>
+    <title>Movies List</title>
+    <link href="{% static 'css/materialize.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+    <!-- Add Materialize CSS and JavaScript links -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <style>
+
+
+        /* Add this CSS in your stylesheets or in a <style> tag within the HTML file */
+        
+        /* Main Footer */
+        /* Add this CSS in your stylesheets or in a <style> tag within the HTML file */
+        
+        /* Main Footer */
+        footer.page-footer.teal {
+          background-color: #1a1a1a; /* Dark Gray */
+          padding-top: 30px;
+          padding-bottom: 30px;
+          background-image: url('https://film-grab.com/wp-content/uploads/2023/03/Empire-of-Light-17.jpg');
+          background-size: cover;
+        }
+        
+        /* White Text for Headings */
+        footer.page-footer.teal h5.white-text {
+          color: #f8f8f8; /* Light Gray */
+          font-size: 24px;
+          margin-bottom: 20px;
+        }
+        
+        /* White Text for Paragraphs */
+        footer.page-footer.teal p.white-text {
+          color: #f8f8f8; /* Light Gray */
+          font-size: 16px;
+          line-height: 1.6;
+          margin-bottom: 30px;
+        }
+        
+        /* Grey Text for Links */
+        footer.page-footer.teal a.white-text {
+          color: #b3b3b3; /* Gray */
+          font-size: 16px;
+        }
+        
+        /* Brown Text for Powered By Link */
+        footer.page-footer.teal a.brown-text.text-lighten-3 {
+          color: #c0a080; /* Light Brown */
+          font-size: 14px;
+        }
+        
+        /* Add Padding to Links */
+        footer.page-footer.teal ul {
+          margin: 0;
+          padding: 0;
+        }
+        
+        /* Center Align Links */
+        footer.page-footer.teal ul {
+          display: flex;
+          justify-content: center;
+        }
+        
+        /* Space Out Link Items */
+        footer.page-footer.teal li {
+          margin: 0 15px;
+        }
+        
+        /* Add a Separator Line */
+        footer.page-footer.teal .divider {
+          border-top: 1px solid #333; /* Dark Gray */
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
+        
+        
+        .profile-picture-container {
+                width: 50px;
+                height:50px;
+                border-radius: 80%;
+                overflow: hidden;
+                margin: 5px;
+                background-color: #f2f2f2;
+                display: flex;
+                justify-content: center;
+                text-align: center;
+                top: 50px;
+            }
+        
+        .profile-picture {
+          max-width:  60px; /* Adjust the width as needed */
+          max-height: 70px; /* Adjust the height as needed */
+          vertical-align: top; /* Align the image vertically */
+        
+              
+                object-fit: contain;
+        }
+        
+        
+          </style>
+        <script>
+        
+        $(document).ready(function() {
+            $('.dropdown-trigger').dropdown();
+        
+            // AJAX function to fetch movies by genre
+            function fetchMoviesByGenre(genre) {
+              $.ajax({
+                url: `/movies_by_genre/${genre}/`,
+                type: 'GET',
+                success: function(response) {
+                  $('#movies-container').html(response);
+                },
+                error: function(xhr) {
+                  console.error('Error occurred while fetching movies by genre');
+                },
+              });
+            }
+        
+            // Event handler for genre item click
+            $('.genre-item').on('click', function(event) {
+              event.preventDefault();
+              const genre = $(this).find('a').data('genre');
+              fetchMoviesByGenre(genre);
+            });
+          });
+        </script>
+        
+        </script>
+          <!-- CSS  -->
+          <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+          <link href="{% static 'css/materialize.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+          <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+        </head>
+        <body>
+        
+          <nav class="white" role="navigation">
+            <div class="nav-wrapper container">
+              <a id="logo-container left" href="#" class="brand-logo ">CinephileXO</a>
+              <ul class="right hide-on-med-and-down">
+                
+              
+              
+                
+                <li><a href="{% url 'movies' %}">Movies</a></li>
+                <li><a href="{% url 'favlist' %}">favorites &nbsp;&nbsp;</a></li>
+        
+                <li><a href="{% url 'top_10_movies' %}">top10</a></li>
+        
+                  <li>
+                    <a class="dropdown-trigger" href="#" data-target="dropdown">
+                      Genre<i class="material-icons right"></i>
+                      </a>
+        
+                      <ul id="dropdown" class="dropdown-content dropdown-content-bottom">
+                        <li class="genre-item" data-genre="Action">
+                          <a href="{% url 'genre_categorize' genre='Action' %}">Action</a>
+                          </li>
+        
+                        <li class="genre-item" data-genre="Adventure">
+                          <a href="{% url 'genre_categorize' genre='Adventure' %}">Adventure</a>
+                        </li>
+                        <li class="genre-item" data-genre="Comedy">
+                        <a href="{% url 'genre_categorize' genre='Biography' %}">Biography</a>
+                      </li>
+                  </ul>
+                </li>
+                
+                <li><a href="{% url 'watchlist' %}">Watchlist &nbsp;&nbsp;</a></li>
+              
+                <li>
+                
+                  <a class="dropdown-trigger" href="#" data-target="dropdown1">
+                    <div class="profile-picture-container">
+                    <img src="{{ logged_in_user_profile_pic_url }}" alt="Profile Picture" class="profile-picture">
+                   <i class="material-icons right"></i>
+                </a></li></div>
+                  <ul id="dropdown1" class="dropdown-content dropdown-content-bottom">
+                      <li><a href="{% url 'profile' %}">Profile</a></li>
+                      <li><a href="{% url 'login' %}">Logout</a></li>
+                  </ul>
+              </li>
+              <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var elems = document.querySelectorAll('.dropdown-trigger');
+                    var options = {
+                        // Add any necessary options for the dropdown
+                    };
+                    var instances = M.Dropdown.init(elems, options);
+                });
+            </script>   
+             
+            </div>
+          </nav>
+        
+
+    <h2><center>My Watchlist</center></h2>
+        <ul class="movies-list">
+            {% for movie in movies %}
+                <div class="movie-card">
+                    <div class="movie-thumbnail">
+                        <img src="/media/{{ movie.thumbnail }}" alt="{{ movie.title }}">
+                    </div>
+                    <div class="movie-details">
+                        <h2><a href="{% url 'movie_details' imdb_id=movie.imdbID %}">{{ movie.title }}</a></h2>
+
+                        <p><strong>Year:</strong> {{ movie.year }}</p>
+                        <p><strong>Director:</strong> {{ movie.director }}</p>
+                        <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                        {% if movie.avg_rating %}
+                        <p><strong>Cine Rating: </strong>{{ movie.avg_rating }}</p>
+                    {% else %}
+                        <h3>No ratings yet</h3>
+                    {% endif %}
+                          <!--<p>Description: {{ movie.description }}</p>-->
+                        </div>
+                    </div>
+                
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+
+<style>
+.movies-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.movies-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.movie-card {
+    width: 14.7%;
+    margin: 20px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.movie-thumbnail img {
+    width: 100%;
+    height: auto;
+}
+
+.movie-details h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.movie-details p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+</style>

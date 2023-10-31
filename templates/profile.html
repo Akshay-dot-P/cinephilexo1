@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+
+
+    <title>Profile</title>
+    <style>
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .profile-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .profile-picture-container {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+        background-color: #f2f2f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .profile-picture {
+        width: auto;
+        height: 100%;
+        object-fit: contain;
+    }
+    .profile-info {
+        margin-top: 20px;
+    }
+</style>
+<style>
+body {
+  background-image: url("{% static 'img/flower.png' %}");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* This makes the background fixed while scrolling */
+  margin: 0; /* Remove default margin on body element */
+  padding: 0; /* Remove default padding on body element */
+  height: 100vh; /* Set the background height to cover the viewport height */
+  width: 100%; /* Set the background width to cover the entire viewport width */
+}
+
+    </style>
+</head>
+<body>
+
+<div class="container" style="background-color: white; padding: 30px; width: 350PX; margin-left: 440px; margin-top: -20px;  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);">
+    <div class="profile-header">
+        
+        <h1>Welcome, {{ logged_in_user }}!</h1>
+    </div>
+	
+
+    
+    
+
+    <div class="profile-info" >
+        <div class="profile-picture-container">
+            {% if logged_in_user_profile_pic_url %}
+                <img class="profile-picture" src="{{ logged_in_user_profile_pic_url }}" alt="Profile Picture">
+            {% else %}
+                <p>No profile picture available.</p>
+            {% endif %}
+        </div><br>
+        <center>
+            <form id="profile-pic-form" method="POST" enctype="multipart/form-data" action="{% url 'profile' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <center> <label for="profile_pic">Update Profile Picture:</label>
+                    <input type="file" name="profile_pic" accept="image/*">
+                </div><br>
+               <center><button id="update-profile-pic-btn" type="button">Update Profile Picture</button></center>
+            </form>
+        <p>Email: {{ email }}</p>
+        <!-- Add other profile information fields here -->
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+      // Attach a click event to the "Update Profile Picture" button
+      $('#update-profile-pic-btn').click(function(e) {
+        e.preventDefault(); // Prevent form submission
+  
+        // Get the form data
+        var form = $('#profile-pic-form');
+        var formData = new FormData(form[0]);
+  
+        // Send AJAX request to update profile picture
+        $.ajax({
+          url: form.attr('action'),
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(data) {
+            // Update the profile picture image source
+            $('.profile-picture').attr('src', data.profile_pic_url);
+  
+            // Optional: Show a success message to the user
+            $('#update-success-message').text('Profile picture updated successfully');
+          },
+          error: function(xhr) {
+            // Handle error case
+            console.log('Error:', xhr.responseText);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

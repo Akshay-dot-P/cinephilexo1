@@ -1,0 +1,798 @@
+
+<!DOCTYPE html>
+{% load static %}
+
+
+<html>
+<head>
+    <title>Movie Details</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <style>
+      .like-button {
+          background-size: 30px 30px; /* Adjust the size as needed */
+          background-repeat: no-repeat;
+          background-position: center center;
+          width: 30px; /* Set the width of the button to match the image width */
+          height: 30px; /* Set the height of the button to match the image height */
+          border: none; /* Remove any border */
+          padding: 0; /* Remove padding */
+          background-image: url("{% static 'img/like.png' %}");
+
+          }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #111111;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: white;
+        }
+
+        .movie-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .movie-details {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .movie-poster {
+            flex: 1 0 300px;
+            margin-right: 20px;
+        }
+
+        .movie-poster img {
+            width: 40%;
+            height: auto;
+            border-radius: 5px;
+            margin-left: 30%;
+        }
+        
+        .movie-thumbnail {
+            position: relative;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .movie-thumbnail::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, rgba(18, 18, 18, 0.9) 100%);
+            pointer-events: none;
+        }
+
+        .movie-thumbnail img {
+            display: inline-block;
+            width: 80%;
+            height: auto;
+            border-radius: 5px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .movie-info {
+            flex: 1 0 400px;
+        }
+
+        .movie-info p {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .movie-info .genre {
+            margin-bottom: 20px;
+        }
+
+        .movie-info .rating {
+            font-weight: bold;
+            color: #81d8d0;
+        }
+
+        .movie-description {
+            margin-top: 20px;
+        }
+
+        .movie-description p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
+
+
+        .ratings-container {
+            margin-top: 20px;
+        }
+
+        .rating-item {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .rating-item p {
+            font-size: 16px;
+            margin: 0;
+        }
+
+
+/* styles.css */
+
+.movie-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex; /* Use flexbox to create a horizontal layout */
+}
+
+.movie-item {
+  margin-right: 20px; /* Add a little gap between movies */
+}
+
+.movie-item:last-child {
+  margin-right: 0; /* Remove right margin from the last movie to avoid extra gap */
+}
+
+.movie-item a {
+  display: block;
+  text-align: center;
+}
+
+.movie-item img {
+  width: 150px; /* Set the desired width for the movie thumbnails */
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.movie-item span {
+  display: block;
+  margin-top: 5px;
+}
+
+
+        
+    </style>
+
+
+
+<style>
+
+        .reviews-container {
+            margin-top: 20px;
+        }
+
+        .review {
+            display: flex;
+            align-items: center; /* Align items to the center vertically */
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .review .vote-buttons {
+            display: flex;
+            flex-direction: column; /* Stack the buttons vertically */
+            align-items: center; /* Align buttons in the center horizontally */
+            justify-content: flex-start; /* Align buttons to the top of the container */
+            margin-right: 10px; /* Add some spacing between buttons and content */
+        }
+
+        .review .upvote-btn,
+        .review .downvote-btn {
+            width: 25px;
+            height: 25px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .review .upvote-btn:before,
+        .review .downvote-btn:before {
+            content: "";
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+        }
+
+        .review .upvote-btn:before {
+            border-bottom: 15px solid #ff4500; /* Orange color for upvote */
+            margin-bottom: 5px;
+        }
+
+        .review .downvote-btn:before {
+            border-top: 15px solid #7193ff; /* Blue color for downvote */
+            margin-top: 5px;
+        }
+
+        .review .upvote-btn.active:before {
+            border-bottom: 15px solid #ff8c00; /* Darker orange for active upvote */
+        }
+
+        .review .downvote-btn.active:before {
+            border-top: 15px solid #5c7fff; /* Darker blue for active downvote */
+        }
+
+        .review-content {
+            flex: 1; /* Take up the remaining space */
+        }
+
+        .review h3 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .review p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Style for the vote count number */
+        .vote-count {
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        
+
+
+
+.vote-buttons {
+  display: flex;
+  flex-direction: column; /* Stack the buttons vertically */
+  align-items: center; /* Align buttons in the center horizontally */
+  justify-content: flex-start; /* Align buttons to the top of the container */
+  margin-right: 10px; /* Add some spacing between buttons and content */
+}
+
+.upvote-btn,
+.downvote-btn {
+  width: 25px;
+  height: 25px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+}
+.upvote-btn:before,
+.downvote-btn:before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+}
+
+.upvote-btn:before {
+  border-bottom: 15px solid #ff4500; /* Orange color for upvote */
+  margin-bottom: 5px;
+}
+
+.downvote-btn:before {
+  border-top: 15px solid #7193ff; /* Blue color for downvote */
+  margin-top: 5px;
+}
+
+.upvote-btn.active:before {
+  border-bottom: 15px solid #ff8c00; /* Darker orange for active upvote */
+}
+
+.downvote-btn.active:before {
+  border-top: 15px solid #5c7fff; /* Darker blue for active downvote */
+}
+
+
+
+.edit-review-btn,
+.delete-review-btn {
+  background-color: grey; /* Reddit blue for buttons */
+  color: #fff; /* White text color */
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.delete-review-btn {
+  background-color: #0079d3; /* Orange color for delete button */
+}
+
+
+    </style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+  function submitReview() {
+    event.preventDefault(); // Prevent default form submission behavior
+    var form = $('#review-form');
+    $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      data: form.serialize(),
+      
+      success: function(response) {
+
+        
+        // Clear the review input
+        form.find('textarea').val('');
+
+        // Render the "My Review" section
+        var myReviewContainer = $('#my-review-container');
+        if (response.my_review) {
+          myReviewContainer.html(`
+            <p id="my-review-text">${response.my_review}</p>
+            <button class="edit-review-btn">Edit</button>
+            <button class="delete-review-btn">Delete</button>
+          `);
+        } else {
+          myReviewContainer.html('<p>No review found.</p>');
+        }
+
+        // Render the "Popular Reviews" section
+        var popularReviewsContainer = $('#popular-reviews-container');
+        
+        for (var i = 0; i < response.popular_reviews.length; i++) {
+          var review = response.popular_reviews[i];
+          var reviewDiv = $('<div>').addClass('review');
+          var reviewUser = $('<h3>').text(review.user);
+          var reviewText = $('<p>').text(review.text);
+          reviewDiv.append(reviewUser, reviewText);
+          popularReviewsContainer.append(reviewDiv);
+          updatePopularReviews(response.popular_reviews);
+
+        }
+
+        setTimeout(function() {
+          window.location.reload();
+        }, 100);
+      },
+
+      
+      error: function(xhr) {
+        // Handle error case
+        console.log('Error:', xhr.responseText);
+      }
+    });
+  }
+
+  
+
+  $(document).ready(function() {
+    $('#review-form').on('submit', submitReview);
+  });
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Edit Review Button Click Handler
+  document.querySelector('.edit-review-btn').addEventListener('click', function() {
+    var reviewTextElement = document.querySelector('#my-review-text');
+    var reviewText = reviewTextElement.textContent.trim();
+    var textarea = document.createElement('textarea');
+    textarea.value = reviewText;
+    textarea.classList.add('form-control');
+    reviewTextElement.replaceWith(textarea);
+    console.log(reviewTextElement);
+    var saveButton = document.querySelector('.edit-review-btn');
+    saveButton.textContent = 'Save';
+
+    var deleteButton = document.querySelector('.delete-review-btn');
+    deleteButton.style.display = 'none';
+
+    saveButton.addEventListener('click', saveReview);
+  });
+
+  // Delete Review Button Click Handler
+  document.querySelector('.delete-review-btn').addEventListener('click', function() {
+    var imdb_id = '{{ movie.imdbID }}'; // Replace with the actual IMDb ID
+
+// Send AJAX request to delete the review using Django view
+var formData = {
+  csrfmiddlewaretoken: '{{ csrf_token }}',
+};
+
+$.ajax({
+  url: `/delete_review/${imdb_id}/`, // Replace with the URL for the delete_review view
+  type: 'POST',
+  data: JSON.stringify(formData), // Send the data as JSON
+  contentType: 'application/json',
+  headers: {
+    'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token in the request headers
+  },
+  success: function(response) {
+    // Review deleted successfully
+    console.log('Review deleted successfully');
+
+    // Remove the review container from the DOM
+    var reviewContainer = document.querySelector('#my-review-container');
+    reviewContainer.remove();
+    var popularReviewsContainer = $('#popular-reviews-container');
+        popularReviewsContainer.find('.review').each(function () {
+          var user = $(this).data('username');
+          if (user === '{{ request.session.username }}') {
+            $(this).remove();
+          }
+        });
+      
+  },
+  error: function(xhr) {
+    // Error occurred while deleting the review
+    console.error('Error occurred while deleting the review');
+  },
+});
+    // Perform the deletion operation here
+    // You can make an AJAX request to delete the review or perform any other necessary actions
+    // After successful deletion, you can remove the review container from the DOM
+   
+  });
+
+  // Save Review Function
+  function saveReview() {
+    var reviewTextElement = document.querySelector('.edit-review-btn').previousElementSibling;
+    var editedReviewText = reviewTextElement.value.trim();
+    var imdb_id = '{{ movie.imdbID }}'; // Replace with the actual review ID
+
+    // Perform the update operation here
+    // You can make an AJAX request to update the review or perform any other necessary actions
+    // After successful update, replace the textarea with the updated review text and restore the buttons
+
+    var updatedReviewTextElement = document.createElement('p');
+    updatedReviewTextElement.id = 'my-review-text';
+    updatedReviewTextElement.textContent = editedReviewText; // Set the updated review text
+
+
+    var editButton = document.querySelector('.edit-review-btn');
+    editButton.textContent = 'Edit';
+    editButton.style.display = 'inline-block'; // Make sure the Delete button is visible
+
+
+    var deleteButton = document.querySelector('.delete-review-btn');
+    deleteButton.style.display = 'inline-block'; // Make sure the Delete button is visible
+    reviewTextElement.replaceWith(updatedReviewTextElement); // Replace textarea with the updated review text
+
+
+    editButton.removeEventListener('click', saveReview);
+    var imdb_id = '{{ movie.imdbID }}'; // Replace with the actual review ID
+    console.log(editedReviewText);
+            // Send AJAX request to update the review using Django view
+            var formData = {
+                text: editedReviewText,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            };
+
+            // Make an AJAX request to update the review
+                  // Make an AJAX request to update the review
+    // Make an AJAX request to update the review using fetch
+                  // Make an AJAX request to update the review
+        $.ajax({
+        url: `/edit_review/${imdb_id}/`, // Replace with the actual IMDb ID
+        type: 'POST',
+        data: JSON.stringify(formData), // Send the data as JSON
+        contentType: 'application/json',
+        
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token in the request headers
+        },
+        
+        success: function(response) {
+          // Review updated successfully
+          console.log(request.body)
+          console.log('Review updated successfully');
+        },
+        error: function(xhr) {
+          // Error occurred while updating the review
+          console.error('Error occurred while updating the review');
+        },
+      });
+    }
+  });  
+  
+  
+
+
+  // Delete Review Function
+  function deleteReview() {
+    var imdb_id = '{{ movie.imdbID }}'; // Replace with the actual IMDb ID
+
+    // Send AJAX request to delete the review using Django view
+    $.ajax({
+      url: `/delete_review/${imdb_id}/`,
+      type: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token in the request headers
+      },
+      success: function(response) {
+
+        // Review deleted successfully
+        console.log('Review deleted successfully');
+
+
+        // Remove the review container from the DOM
+        var reviewContainer = document.querySelector('#my-review-container');
+        reviewContainer.remove();
+      },
+      error: function(xhr) {
+        // Error occurred while deleting the review
+        console.error('Error occurred while deleting the review');
+      },
+      // Reload the page after the AJAX request is complete
+     
+      
+    });
+  }
+
+  // Delete Review Button Click Handler
+  document.querySelector('.delete-review-btn').addEventListener('click', deleteReview);
+
+
+
+
+
+function refreshdiv1()
+{
+  $('#popular-reviews-container').load(location.href);
+
+// Reload the page after a short delay (100 milliseconds)
+
+}
+
+
+
+function refreshdiv() {
+  // Reload the content of the reviews container using AJAX
+  $('#main-head text-center').load(location.href, function () {
+    // The callback function will be executed after the content is loaded
+    // You can add any additional actions related to the updated content here
+    // For example, you might want to show a message or perform other UI updates.
+  });
+}
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const dropdownTogglers = document.querySelectorAll(".dropdown-toggler");
+
+      dropdownTogglers.forEach(function (toggler) {
+        toggler.addEventListener("click", function (event) {
+          event.preventDefault();
+          const target = document.getElementById(toggler.dataset.toggle);
+
+          if (target) {
+            target.classList.toggle("show");
+          }
+        });
+      });
+    });
+  </script>
+
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+    <div class="container">
+        <div class="movie-title">{{ movie.title }}</div>
+        <div class="movie-thumbnail">
+            <img src="/media/{{ movie.thumbnailbg }}" alt="{{ movie.title }}">
+        </div>
+
+        <div class="movie-details">
+            <div class="movie-poster"><br><br>
+                <img src="/media/{{ movie.thumbnail }}" alt="{{ movie.title }}">
+                <form action="{% url 'add_to_favlist'  movie_title=movie.title %}" method="POST">
+                  {% csrf_token %}<br>
+                  <button type="submit" style="border: none; background: none;">
+                      <img src="{% static 'img/heart.png' %}" style="width: 40px; height: auto; margin-left: 600%;" alt="Add to Watchlist" />
+                  </button></form>
+            <h3>
+            </div>
+            <div class="movie-info">
+              <br><br><br>
+                <p><strong>Year:</strong> {{ movie.year }}</p>
+                <p><strong>Director:</strong> {{ movie.director }}</p>
+                <p class="genre"><strong>Genre:</strong> {{ movie.genre }}</p>
+                <form action="{% url 'add_to_watchlist' movie_title=movie.title %}" method="POST">
+                  {% csrf_token %}
+                  <button type="submit" style="border: none; background: none;">
+                      <img src="{% static 'img/download.png' %}" style="width: 30px; height: auto; background-color: brown; background-size:contain; margin: auto;" alt="Add to Watchlist" />
+
+                      
+
+                  </button>
+              </form>
+                    <br>
+                 
+                    {% if ratings %}
+                        {% for rating in ratings %}
+                            {% if rating.user == request.session.username %}
+                                My Rating: {{ rating.rate }}                 &nbsp;            <a href="{% url 'rate_movie' imdb_id=movie.imdbID %}" class="btn btn-primary">Change Rating</a>
+
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        No rating found  <a href="{% url 'rate_movie' imdb_id=movie.imdbID %}" class="btn btn-primary">Rate</a>
+
+                    {% endif %}
+                </h3>
+                
+                </ul>
+                    <div class="details-container">
+                        <div class="ratings-container">
+                            {% if avg_rating %}
+                                <h3>Average Rating: {{ avg_rating }}</h3>
+                            {% else %}
+                                <h3>No ratings yet</h3>
+                            {% endif %}
+                   <!----<h2>User Ratings: {{ all_ratings }} </h2>-->
+                    
+                          <!-- Add rating form -->
+                          <div class="description">
+                            <div class="block mb-2"><strong>Overview:</strong></div>
+                            <hr>
+                            {{ movie.description }}
+                        </div>
+                
+                 <div id="reviews-section">
+
+                 <h2 >Add a Review:</h2>
+                 <form id ="review-form" method="post">
+                   {% csrf_token %}
+
+                   <div
+                   class="form-group" >
+                   <label for="id_text"></label>
+                   <textarea class="form-control" id="id_text" name="text" rows="4" cols="50" style="left: auto; width: 60%; background-color: #FFFFBE;" required>  I like these form inputs!
+                  </textarea><BR>
+               
+                 </div>
+                 <br>
+                 <button type="submit" id="button" onclick="window.location.reload();"   class="btn btn-primary" >Submit Text</button>
+               </form>
+
+
+
+
+</div>
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="recommended-movies">
+      <h2>Recommended Movies</h2>
+      <ul class="movie-list">
+        {% for movie  in recommended_movies %}
+          <li class="movie-item">
+            <h2><a href="{% url 'movie_details' imdb_id=movie.imdbID %}">
+              <img src="/media/{{ movie.thumbnail }}" alt="{{ movie.title }}">
+          </a></h2>
+
+
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+   
+    <section class="content-wrapper-faq py-5">
+      <div class="container">
+        <h3 class="main-head text-center">Reviews</h3>                
+        <!-- Display user's own review -->
+        <div id="my-review-container">
+          {% if my_review %}
+            <p id="my-review-text">{{ my_review }}</p>
+    
+            <!-- Assuming you have a URL pattern to handle the edit_review view -->
+            <a class="edit-review-btn">Edit</a>
+            {% csrf_token %}
+  
+            <button class="delete-review-btn" onclick="window.location.reload();">Delete</button>
+            <div class="message" style="display: none;"></div>
+    
+          {% else %}
+            <p>No review found.</p>
+          {% endif %}
+        </div>
+
+    <!-- Display popular reviews -->
+    <h2>Popular Reviews:</h2>
+<div class="reviews-container">
+  {% for review in reviews %}
+    <div class="review" data-username="{{ review.user }}">
+      <!--<div class="vote-buttons">
+        <button class="upvote-btn" data-vote-type="upvote">Upvote</button>
+        <div class="vote-count">{{ review.upvotes }}</div>
+        <button class="downvote-btn" data-vote-type="downvote">Downvote</button>
+      </div>-->
+      <div class="review-content">
+        
+        <h3>{{ review.user }}</h3>
+        <p>{{ review.text }}</p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

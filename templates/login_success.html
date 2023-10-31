@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+<script>
+  $(document).ready(function() {
+  // Function to perform the search and display results
+  function performSearch() {
+    var searchQuery = $('#search-input').val().trim();
+
+    // Send an AJAX GET request to the search_movies view with the search query
+    $.ajax({
+      url: '/search_movies/', // Replace with the actual URL for the search_movies view
+      type: 'GET',
+      data: {q: searchQuery},
+      success: function(response) {
+        // Update the movies list with the search results
+        $('#movies-list').html(response);
+      },
+      error: function(xhr) {
+        console.log('Error:', xhr.responseText);
+      }
+    });
+  }
+
+  // Handle form submission for real-time search
+  $('#search-form').on('submit', function(event) {
+    event.preventDefault(); // Prevent default form submission behavior
+    performSearch();
+  });
+
+  // Handle keyup event in the search input for real-time search
+  $('#search-input').on('keyup', function() {
+    performSearch();
+  });
+});
+
+</script>
+{% block banner %}
+
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+          <h1 class="header center white-text text-lighten-2">
+            
+{{ sesion.username }}
+           <h2> Find your favorite movie {{ session.username }}</h2>
+              <div class="row">
+                <form class="col s12" action="{% url 'search_movies' %}" method="GET">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <input type="text" id="search-input" name="q" value="{{ request.GET.q }}" class="white-text">
+                      <label for="search-input">Search</label>
+                    </div>
+                    <button type="submit" name="action" class="waves-effect waves-light btn">
+                      <i class="material-icons left">search</i>Search
+                </div>
+              </form>
+            </div>
+        </div>
+        <br><br>
+      </div>
+    </div>
+    <div class="parallax"><img src="{% static 'img/potraitoflady.jpeg' %}" alt="Unsplashed background img 1"></div>
+  </div>
+  <!--<form action="{% url 'login_success' %}" method="get">
+    {% csrf_token %}
+    <button type="submit" class="btn waves-effect waves-light">Generate Recommendations</button>
+  </form>
+  <form action="{% url 'itemtoitem' %}" method="get">
+    {% csrf_token %}
+    <button type="submit" class="btn waves-effect waves-light">Generate cool</button>
+  </form>-->
+
+
+
+
+<h3><center>Recommended for you</h3></center>
+<div style="background-color: whitesmoke;"   class="movies-container">
+    <ul class="movies-list">
+      {% for movie in recommended_movies %}
+            
+                <div class="movie-card">
+                    <div class="movie-thumbnail">
+
+                            <img src="/media/{{ movie.thumbnail }}" alt="{{ movie.title }}">
+                        </a>                        </div>
+                    <div class="movie-details">
+                        <h2><a href="{% url 'movie_details' imdb_id=movie.imdbID %}">{{ movie.title }}</a></h2>
+
+                        <p><strong>Year:</strong> {{ movie.year }}</p>
+                        <p><strong>Director:</strong> {{ movie.director }}</p>
+                        <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                        
+
+                        <!--<p>Description: {{ movie.description }}</p>-->
+                    </div>
+                </div>
+            
+        {% endfor %}
+    </ul>
+</div>
+
+
+
+</body>
+</html>
+<style>
+.movies-container {
+display: flex;
+flex-wrap: wrap;
+justify-content: flex-start;
+
+}
+
+.movies-list {
+list-style: none;
+padding: 0;
+margin: 0;
+display: flex;
+flex-wrap: wrap;
+justify-content: flex-start;
+}
+
+.movie-card {
+width: 14.7%;
+margin: 28px;
+padding: 12px;
+
+border: 1px solid #ccc;
+border-radius: 5px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.movie-thumbnail img {
+width: 100%;
+height: auto;
+}
+
+.movie-details h2 {
+font-size: 18px;
+font-weight: bold;
+margin-top: 10px;
+}
+
+.movie-details p {
+font-size: 14px;
+margin: 5px 0;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">movie </i></h2>
+            <h5 class="center">Find your favourite movie</h5>
+            
+            <p class="light">All your favourite movies is just one click away from you.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">visibility</i></h2>
+            <h5 class="center">create watchlist and more</h5>
+
+            <p class="light">You can create your own watchlist and come back whenever you feel like.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">rate_review</i></h2>
+            <h5 class="center">review your favourite movie</h5>
+
+            <p class="light">Discuss anything and everything bout movies and tv shows you need in one place</p>
+          </div>
+        </div>
+      </div>
+
+
+{% endblock %}

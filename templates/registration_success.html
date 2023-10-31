@@ -1,0 +1,13 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Successful</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>Registration Successful</h1>
+    <p>Thank you for registering! Your account has been created successfully.</p>
+    <a href="{% url 'login' %}">Login</a>
+</body>
+</html>

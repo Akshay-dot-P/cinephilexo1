@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Rate Movie</h1>
+
+  <form method="POST" action="{% url 'rate_movie' imdb_id=movie.imdbID %}">
+    {% csrf_token %}
+    
+    <!-- Display movie information -->
+    <h2>{{ movie.title }}</h2>
+    <p>{{ movie.description }}</p>
+    
+    <!-- Display rate form fields -->
+    {{ form.as_p }}
+    
+    <!-- Submit button -->
+    <button type="submit">Rate</button>
+  </form>
+{% endblock %}

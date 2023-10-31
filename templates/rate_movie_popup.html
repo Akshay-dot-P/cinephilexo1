@@ -1,0 +1,10 @@
+<!-- rate_movie_popup.html -->
+<div id="rate-movie-popup">
+    <h2>Rate the Movie</h2>
+    <form id="rate-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Submit Rating</button>
+    </form>
+  </div>
+  

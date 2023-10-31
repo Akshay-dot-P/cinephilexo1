@@ -1,0 +1,194 @@
+{% load static %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Edit Review Button Click Handler
+  document.querySelector('.edit-review-btn').addEventListener('click', function() {
+    var reviewTextElement = document.querySelector('#my-review-text');
+    var reviewText = reviewTextElement.textContent.trim();
+    var textarea = document.createElement('textarea');
+    textarea.value = reviewText;
+    textarea.classList.add('form-control');
+    reviewTextElement.replaceWith(textarea);
+    console.log(reviewTextElement);
+    var saveButton = document.querySelector('.edit-review-btn');
+    saveButton.textContent = 'Save';
+
+    var deleteButton = document.querySelector('.delete-review-btn');
+    deleteButton.style.display = 'none';
+
+    saveButton.addEventListener('click', saveReview);
+  });
+
+  // Delete Review Button Click Handler
+  document.querySelector('.delete-review-btn').addEventListener('click', function() {
+    var imdb_id = '{{ movie.imdbID }}'; // Replace with the actual IMDb ID
+
+// Send AJAX request to delete the review using Django view
+var formData = {
+  csrfmiddlewaretoken: '{{ csrf_token }}',
+};
+
+$.ajax({
+  url: `/delete_review/${imdb_id}/`, // Replace with the URL for the delete_review view
+  type: 'POST',
+  data: JSON.stringify(formData), // Send the data as JSON
+  contentType: 'application/json',
+  headers: {
+    'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token in the request headers
+  },
+  success: function(response) {
+    // Review deleted successfully
+    console.log('Review deleted successfully');
+
+    // Remove the review container from the DOM
+    var reviewContainer = document.querySelector('#my-review-container');
+    reviewContainer.remove();
+    
+  },
+  error: function(xhr) {
+    // Error occurred while deleting the review
+    console.error('Error occurred while deleting the review');
+  },
+});
+    // Perform the deletion operation here
+    // You can make an AJAX request to delete the review or perform any other necessary actions
+    // After successful deletion, you can remove the review container from the DOM
+   
+  });
+
+  // Save Review Function
+  function saveReview() {
+    var reviewTextElement = document.querySelector('.edit-review-btn').previousElementSibling;
+    var editedReviewText = reviewTextElement.value.trim();
+    var imdb_id = '{{ movie.imdbID }}'; // Replace with the actual review ID
+
+    // Perform the update operation here
+    // You can make an AJAX request to update the review or perform any other necessary actions
+    // After successful update, replace the textarea with the updated review text and restore the buttons
+
+    var updatedReviewTextElement = document.createElement('p');
+    updatedReviewTextElement.id = 'my-review-text';
+   
+
+    var editButton = document.querySelector('.edit-review-btn');
+    editButton.textContent = 'Edit';
+
+    var deleteButton = document.querySelector('.delete-review-btn');
+    deleteButton.style.display = 'block';
+
+    editButton.removeEventListener('click', saveReview);
+    var imdb_id = '{{ movie.imdbID }}'; // Replace with the actual review ID
+    console.log(editedReviewText);
+            // Send AJAX request to update the review using Django view
+            var formData = {
+                text: editedReviewText,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            };
+
+            // Make an AJAX request to update the review
+                  // Make an AJAX request to update the review
+    // Make an AJAX request to update the review using fetch
+                  // Make an AJAX request to update the review
+        $.ajax({
+        url: `/edit_review/${imdb_id}/`, // Replace with the actual IMDb ID
+        type: 'POST',
+        data: JSON.stringify(formData), // Send the data as JSON
+        contentType: 'application/json',
+        
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token in the request headers
+        },
+        
+        success: function(response) {
+          // Review updated successfully
+          console.log(request.body)
+          console.log('Review updated successfully');
+        },
+        error: function(xhr) {
+          // Error occurred while updating the review
+          console.error('Error occurred while updating the review');
+        },
+      });
+    }
+  });  
+  
+  
+
+
+  // Delete Review Function
+  function deleteReview() {
+    var imdb_id = '{{ movie.imdbID }}'; // Replace with the actual IMDb ID
+
+    // Send AJAX request to delete the review using Django view
+    $.ajax({
+      url: `/delete_review/${imdb_id}/`,
+      type: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}', // Include the CSRF token in the request headers
+      },
+      success: function(response) {
+        // Review deleted successfully
+        console.log('Review deleted successfully');
+
+        // Remove the review container from the DOM
+        var reviewContainer = document.querySelector('#my-review-container');
+        reviewContainer.remove();
+      },
+      error: function(xhr) {
+        // Error occurred while deleting the review
+        console.error('Error occurred while deleting the review');
+      },
+    });
+  }
+
+  // Delete Review Button Click Handler
+  document.querySelector('.delete-review-btn').addEventListener('click', deleteReview);
+</script>
+
+
+<section class="content-wrapper-faq py-5">
+    <div class="container">
+      <h3 class="main-head text-center">Reviews</h3>                
+      <!-- Display user's own review -->
+      <div id="my-review-container">
+        
+        
+        {% if my_review %}
+          <p id="my-review-text">{{ my_review }}</p>
+  
+          <!-- Assuming you have a URL pattern to handle the edit_review view -->
+          <a class="edit-review-btn">Edit</a>
+          {% csrf_token %}
+
+          <button class="delete-review-btn">Delete</button>
+          <div class="message" style="display: none;"></div>
+  
+        {% else %}
+          <p>No review found.</p>
+        {% endif %}
+      </div>
+
+
+
+
+</body> 
+      
+
+
+</script>
+
+
+
+
+
+
+

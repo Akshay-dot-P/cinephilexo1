@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movies List</title>
+    <style>
+    /* Custom styles for movie cards */
+/* Custom styles for movie cards */
+.custom-movie-card {
+    width: 14.7% !important;
+    margin: -30px !important;
+    padding: 12px !important;
+    border: 1px solid #ccc !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.custom-movie-card .movie-thumbnail img {
+    width: 100% !important;
+    height: auto !important;
+}
+
+.custom-movie-card .movie-details h2 {
+    font-size: 18px !important;
+    font-weight: bold !important;
+    margin-top: 10px !important;
+}
+
+.custom-movie-card .movie-details p {
+    font-size: 14px !important;
+    margin: 5px 0 !important;
+}
+
+  </style>
+</head>
+<body>
+    <nav class="white" role="navigation">
+        <!-- Your navigation bar code goes here -->
+    </nav>
+    <h1><center>Movies List</center></h1>
+    <div style="background-color: whitesmoke;" class="movies-container">
+        <ul class="movies-list">
+            {% for movie in movies %}
+            <div class="movie-card custom-movie-card">
+                <div class="movie-thumbnail">
+                    <img src="/media/{{ movie.thumbnail }}" alt="{{ movie.title }}">
+                </div>
+                <div class="movie-details">
+                    <h2><a href="{% url 'movie_details' imdb_id=movie.imdbID %}">{{ movie.title }}</a></h2>
+                    <p><strong>Year:</strong> {{ movie.year }}</p>
+                    <p><strong>Director:</strong> {{ movie.director }}</p>
+                    <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                    {% if movie.avg_rating %}
+                    <p><strong>Cine Rating: </strong>{{ avg_rating }}</p>
+                    {% else %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recommended Movies</title>
+</head>
+<body>
+    <h1>Recommended Movies</h1>
+
+    <h2>Top Recommended Movies:</h2>
+    <ul>
+        {% for movie in recommended_movies %}
+        <div class="movie-card">
+            <div class="movie-thumbnail">
+                <img src="/media/{{ movie.thumbnail }}" alt="{{ movie.title }}">
+            </div>
+            <div class="movie-details">
+
+                <p><strong>Year:</strong> {{ movie.year }}</p>
+                <p><strong>Director:</strong> {{ movie.director }}</p>
+                <p><strong>Genre:</strong> {{ movie.genre }}</p>
+                {% if movie.avg_rating %}
+                <p><strong>Cine Rating: </strong>{{ movie.avg_rating }}</p>
+            {% else %}
+                <h3>No ratings yet</h3>
+            {% endif %}
+                  <!--<p>Description: {{ movie.description }}</p>-->
+                </div>
+            </div>
+        
+    {% endfor %}
+</ul>
+</div>
+</body>
+</html>
+
+<style>
+.movies-container {
+display: flex;
+flex-wrap: wrap;
+justify-content: flex-start;
+}
+
+.movies-list {
+list-style: none;
+padding: 0;
+margin: 0;
+display: flex;
+flex-wrap: wrap;
+justify-content: flex-start;
+}
+
+.movie-card {
+width: 30.7%;
+margin: 20px;
+padding: 12px;
+border: 1px solid #ccc;
+border-radius: 5px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.movie-thumbnail img {
+width: 100%;
+height: auto;
+}
+
+.movie-details h2 {
+font-size: 18px;
+font-weight: bold;
+margin-top: 10px;
+}
+
+.movie-details p {
+font-size: 14px;
+margin: 5px 0;
+}
+</style>
+
+    

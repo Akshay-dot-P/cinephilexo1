@@ -1,0 +1,87 @@
+{% load static %}
+
+<h1>{{ movie.title }}</h1>
+<p>Director: {{ movie.director }}</p>
+<p>Year: {{ movie.year }}</p>
+<hr>
+
+<!-- rate_movie.html -->
+
+<h1>Rate Movie: {{ movie.title }}</h1>
+
+<!-- Display the average rating -->
+
+<!-- Display the existing ratings -->
+<ul id="ratings-list">
+  {% for rating in ratings %}
+    {% if rating.user == request.session.username %}
+      <li>{{ rating.user }}: {{ rating.rate }}</li>
+    {% endif %}
+  {% empty %}
+    <li>No ratings available</li>
+  {% endfor %}
+</ul>
+<!-- Display the user's rating -->
+
+<!-- Display the form for rating the movie -->
+<form id="rate-form" method="POST">
+  {% csrf_token %}
+  {{ form }}
+
+  <button type="submit">Rate</button>
+</form>
+
+<!-- JavaScript code to handle AJAX rating submission -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // Function to handle AJAX rating submission
+  function submitRating() {
+    var form = $('#rate-form');
+    $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      data: form.serialize(),
+      success: function(response) {
+        // Update the UI with the new rating
+        var rating = response.rate;
+        var avgRating = response.avg_rating;
+        var myRating = response.my_rating;
+
+        // Update the user's rating
+        var myRatingElement = $('#my-rating');
+        myRatingElement.text('Your Rating: ' + myRating);
+
+        // Remove previous ratings from the same user
+        var ratingsList = $('#ratings-list');
+        ratingsList.find('li').filter(function() {
+          return $(this).text().startsWith(response.user + ':');
+        }).remove();
+
+        // Add the new rating to the list
+        var newRating = $('<li>').text(response.user + ': ' + rating);
+        ratingsList.append(newRating);
+
+        // Update the average rating
+        var averageRating = $('#average-rating');
+        averageRating.text('Average Rating: ' + avgRating);
+          // Update the rating in movie_Details.html
+          var movieDetailsPage = window.opener;
+        if (movieDetailsPage) {
+          movieDetailsPage.updateRating(avgRating, myRating);
+        }
+      
+      },
+      error: function(xhr) {
+        // Handle error case
+        console.log('Error:', xhr.responseText);
+      }
+    });
+  }
+
+  // Submit the rating on form submission
+  $('#rate-form').on('submit', function(event) {
+    event.preventDefault();
+    submitRating();
+  });
+</script>
+

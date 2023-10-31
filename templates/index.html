@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block banner %}
+  <div id="index-banner" class="parallax-container">
+    <div class="section no-pad-bot">
+      <div class="container">
+        <div class="row center">
+          <h1 class="header center white-text text-lighten-2">Find your favorite movie</h1>
+              <div class="row">
+              <form class="col s12">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <textarea typ="submit" id="textarea1" name="q" value="{{ request.GET.q }}" class="materialize-textarea white-text"></textarea>
+                    <label for="textarea1">Search</label>
+                  </div>
+                  <button type="submit" name="action" class="waves-effect waves-light btn"><i class="material-icons left"></i>Search</button>
+                </div>
+              </form>
+            </div>
+        </div>
+        <br><br>
+      </div>
+    </div>
+    <div class="parallax"><img src="{% static 'img/potraitoflady.jpeg' %}" alt="Unsplashed background img 1"></div>
+  </div>
+{% endblock %}
+
+
+{% block content %}
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">movie </i></h2>
+            <h5 class="center">Find your favourite movie</h5>
+            
+            <p class="light">All your favourite movies is just one click away from you.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">visibility</i></h2>
+            <h5 class="center">create watchlist and more</h5>
+
+            <p class="light">You can create your own watchlist and come back whenever you feel like.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center brown-text"><i class="material-icons">rate_review</i></h2>
+            <h5 class="center">review your favourite movie</h5>
+
+            <p class="light">Discuss anything and everything bout movies and tv shows you need in one place</p>
+          </div>
+        </div>
+      </div>
+
+
+{% endblock %}
